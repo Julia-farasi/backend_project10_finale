@@ -1,0 +1,29 @@
+{
+  "name": "abschlussprojekt",
+  "version": "1.0.0",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "dev": "node --watch --env-file=.env server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Julia-farasi/backend_project10_finale.git"
+  },
+  "author": "Julia",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Julia-farasi/backend_project10_finale/issues"
+  },
+  "homepage": "https://github.com/Julia-farasi/backend_project10_finale#readme",
+  "keywords": [],
+  "description": "",
+  "dependencies": {
+    "chalk": "^5.4.1",
+    "cors": "^2.8.5",
+    "express": "^5.1.0",
+    "pg": "^8.16.2",
+    "sequelize": "^6.37.7",
+    "zod": "^3.25.67"
+  }
+}
