@@ -93,6 +93,12 @@ export const loginUser = async (req, res, next) => {
     next(err);
   }
 };
+//LOGOUT
+export const logout = (req, res) => {
+  return res
+    .status(200)
+    .json({ message: "Logout erfolgreich (Client-Token löschen)" });
+};
 
 // GET /user/:id
 const getOneUser = async (req, res, next) => {
