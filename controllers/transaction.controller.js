@@ -1,6 +1,6 @@
 // controllers/transaction.controller.js
 import Transaction from "../models/Transaction.js";
-
+//CREATE A NEW TRANSACTION
 export const createTransaction = async (req, res) => {
   const { amount, is_expense, description, category, date } = req.body;
   const userId = req.user?.id;
@@ -29,5 +29,57 @@ export const createTransaction = async (req, res) => {
   } catch (err) {
     console.error("Fehler beim Speichern:", err);
     res.status(500).json({ message: "Fehler beim Speichern" });
+  }
+};
+
+//GET METHODE/ GET TRANSACTIONS
+export const getTransactions = async (req, res) => {
+  const userId = req.user.id;
+  const limit = parseInt(req.query.limit) || 100; // z. B. limit=3
+
+  try {
+    const transactions = await Transaction.findAll({
+      where: { user_id: userId },
+      order: [["date", "DESC"]],
+      limit,
+    });
+
+    res.status(200).json(transactions);
+  } catch (err) {
+    console.error("Fehler beim Laden der Transaktionen:", err);
+    res.status(500).json({ message: "Fehler beim Laden" });
+  }
+};
+////GET /transaction/income
+
+export const getIncomeTransactions = async (req, res) => {
+  const userId = req.user.id;
+
+  try {
+    const income = await Transaction.findAll({
+      where: { user_id: userId, is_expense: false },
+      order: [["date", "DESC"]],
+    });
+
+    res.status(200).json(income);
+  } catch (err) {
+    console.error("Fehler beim Laden der Einnahmen:", err);
+    res.status(500).json({ message: "Fehler beim Laden der Einnahmen" });
+  }
+};
+////GET /transaction/expense
+export const getExpenseTransactions = async (req, res) => {
+  const userId = req.user.id;
+
+  try {
+    const expenses = await Transaction.findAll({
+      where: { user_id: userId, is_expense: true },
+      order: [["date", "DESC"]],
+    });
+
+    res.status(200).json(expenses);
+  } catch (err) {
+    console.error("Fehler beim Laden der Ausgaben:", err);
+    res.status(500).json({ message: "Fehler beim Laden der Ausgaben" });
   }
 };
