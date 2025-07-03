@@ -51,13 +51,28 @@ export const getTransactions = async (req, res) => {
   }
 };
 ////GET /transaction/income
-
+import { Op } from "sequelize";
 export const getIncomeTransactions = async (req, res) => {
   const userId = req.user.id;
-
+  const { month } = req.query;
   try {
+    const where = {
+      user_id: userId,
+      is_expense: false,
+    };
+
+    if (month) {
+      const [year, monthStr] = month.split("-");
+      const start = new Date(year, parseInt(monthStr) - 1, 1);
+      const end = new Date(year, parseInt(monthStr), 0, 23, 59, 59); // letzter Tag des Monats
+
+      where.date = {
+        [Op.between]: [start, end],
+      };
+    }
+
     const income = await Transaction.findAll({
-      where: { user_id: userId, is_expense: false },
+      where,
       order: [["date", "DESC"]],
     });
 
@@ -70,10 +85,25 @@ export const getIncomeTransactions = async (req, res) => {
 ////GET /transaction/expense
 export const getExpenseTransactions = async (req, res) => {
   const userId = req.user.id;
-
+  const { month } = req.query;
   try {
+    const where = {
+      user_id: userId,
+      is_expense: true,
+    };
+
+    if (month) {
+      const [year, monthStr] = month.split("-");
+      const start = new Date(year, parseInt(monthStr) - 1, 1);
+      const end = new Date(year, parseInt(monthStr), 0, 23, 59, 59);
+
+      where.date = {
+        [Op.between]: [start, end],
+      };
+    }
+
     const expenses = await Transaction.findAll({
-      where: { user_id: userId, is_expense: true },
+      where,
       order: [["date", "DESC"]],
     });
 
