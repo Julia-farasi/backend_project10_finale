@@ -41,8 +41,10 @@ export const getTransactions = async (req, res) => {
   try {
     const transactions = await Transaction.findAll({
       where: { user_id: userId },
-      order: [["date", "DESC"]],
-      limit,
+      // order: [["date", "DESC"]],
+      // limit,
+      limit: parseInt(req.query.limit) || 3,
+      order: [["createdAt", "DESC"]],
     });
 
     res.status(200).json(transactions);
