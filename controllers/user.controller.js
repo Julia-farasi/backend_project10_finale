@@ -118,7 +118,24 @@ const getOneUser = async (req, res, next) => {
     next(err);
   }
 };
+//GET USER/ME The Name in the greetings
 
+export const getUserProfile = async (req, res) => {
+  try {
+    const user = await User.findByPk(req.user.id, {
+      attributes: { exclude: ["password"] },
+    });
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    console.log("req.user:", req.user);
+    res.json(user);
+  } catch (error) {
+    console.error("Fehler beim Laden von /user/me:", error);
+    res.status(500).json({ message: "Serverfehler" });
+  }
+};
 // PUT /user/:id
 const updateUser = async (req, res, next) => {
   try {
