@@ -4,6 +4,7 @@ import Transaction from "../models/Transaction.js";
 export const createTransaction = async (req, res) => {
   const { amount, is_expense, description, category, date } = req.body;
   const userId = req.user?.id;
+  console.log("req.user in transa", userId);
 
   if (!userId) {
     return res.status(401).json({ message: "Nicht autorisiert" });
@@ -113,3 +114,9 @@ export const getExpenseTransactions = async (req, res) => {
     res.status(500).json({ message: "Fehler beim Laden der Ausgaben" });
   }
 };
+// In transaction.controller.js
+// const transactions = await Transaction.findAll({
+//   where: { user_id: req.user.id },
+//   limit: parseInt(req.query.limit) || 3,
+//   order: [["createdAt", "DESC"]],
+// });
