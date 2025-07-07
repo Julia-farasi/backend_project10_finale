@@ -1,20 +1,21 @@
-import { Sequelize } from "sequelize";
+import { DataTypes } from "sequelize";
+import sequelize from "../db/index.js";
 
-const Goals = Sequelize.afterDefine("Money", {
+const Goals = sequelize.define("SparZiele", {
   title: {
-    type: DataTypes.VARCHAR,
+    type: DataTypes.STRING,
+  },
+  description: {
+    type: DataTypes.STRING,
   },
   target_amount: {
     type: DataTypes.INTEGER,
   },
-  savec_amount: {
+  saved_amount: {
     type: DataTypes.INTEGER,
   },
   deadline: {
     type: DataTypes.DATE,
-  },
-  created_at: {
-    type: DataTypes.TIMESTAMP,
   },
 });
 
