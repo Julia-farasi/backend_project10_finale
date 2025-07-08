@@ -48,3 +48,19 @@ export const deleteGoal = async (req, res) => {
     res.status(500).json({ error: "Fehler beim Löschen des Ziels" });
   }
 };
+
+// PATCH /goals/:id
+export const updateGoal = async (req, res) => {
+  const { id } = req.params;
+  const { saved_amount } = req.body;
+
+  try {
+    const goal = await Goals.findByPk(id);
+    if (!goal) return res.status(404).json({ message: "Nicht gefunden" });
+
+    await goal.update({ saved_amount });
+    res.json(goal);
+  } catch (err) {
+    res.status(500).json({ message: "Fehler beim Aktualisieren", error: err });
+  }
+};
