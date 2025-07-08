@@ -1,4 +1,5 @@
 // controllers/transaction.controller.js
+import { Sequelize } from "sequelize";
 import Transaction from "../models/Transaction.js";
 //CREATE A NEW TRANSACTION
 export const createTransaction = async (req, res) => {
@@ -137,4 +138,44 @@ export const deleteTransaction = async (req, res) => {
   }
 
   res.status(204).send();
+};
+
+// controllers/transaction.controller.js
+// import { Sequelize } from "sequelize";
+
+// GET /transaction/monthly-summary
+// // GET /transaction/monthly-summary
+export const getMonthlySummary = async (req, res) => {
+  try {
+    const userId = req.user.id;
+
+    const results = await Transaction.findAll({
+      attributes: [
+        [Sequelize.fn("DATE_TRUNC", "month", Sequelize.col("date")), "month"],
+        [
+          Sequelize.literal(
+            `SUM(CASE WHEN is_expense = false THEN amount ELSE 0 END)`
+          ),
+          "income",
+        ],
+        [
+          Sequelize.literal(
+            `SUM(CASE WHEN is_expense = true THEN amount ELSE 0 END)`
+          ),
+          "expense",
+        ],
+      ],
+      where: { user_id: userId },
+      group: [Sequelize.fn("DATE_TRUNC", "month", Sequelize.col("date"))],
+      order: [
+        [Sequelize.fn("DATE_TRUNC", "month", Sequelize.col("date")), "ASC"],
+      ],
+      raw: true,
+    });
+
+    res.json(results);
+  } catch (err) {
+    console.error("❌ Fehler bei Monatsübersicht:", err);
+    res.status(500).json({ message: "Fehler beim Laden der Monatsübersicht" });
+  }
 };

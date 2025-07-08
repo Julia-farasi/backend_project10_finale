@@ -6,6 +6,7 @@ import {
   getIncomeTransactions,
   getExpenseTransactions,
   deleteTransaction,
+  getMonthlySummary,
 } from "../controllers/transaction.controller.js";
 import { authenticateToken } from "../middleware/authMiddleware.js";
 
@@ -17,5 +18,6 @@ transactionRouter.get("/", authenticateToken, getTransactions);
 transactionRouter.get("/income", authenticateToken, getIncomeTransactions);
 transactionRouter.get("/expense", authenticateToken, getExpenseTransactions);
 transactionRouter.delete("/:id", authenticateToken, deleteTransaction);
+transactionRouter.get("/monthly-summary", authenticateToken, getMonthlySummary);
 
 export default transactionRouter;
