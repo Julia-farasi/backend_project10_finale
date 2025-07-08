@@ -5,6 +5,7 @@ import {
   createTransaction,
   getIncomeTransactions,
   getExpenseTransactions,
+  deleteTransaction,
 } from "../controllers/transaction.controller.js";
 import { authenticateToken } from "../middleware/authMiddleware.js";
 
@@ -15,5 +16,6 @@ transactionRouter.post("/", authenticateToken, createTransaction);
 transactionRouter.get("/", authenticateToken, getTransactions);
 transactionRouter.get("/income", authenticateToken, getIncomeTransactions);
 transactionRouter.get("/expense", authenticateToken, getExpenseTransactions);
+transactionRouter.delete("/:id", authenticateToken, deleteTransaction);
 
 export default transactionRouter;

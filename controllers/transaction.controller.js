@@ -122,3 +122,19 @@ export const getExpenseTransactions = async (req, res) => {
 //   limit: parseInt(req.query.limit) || 3,
 //   order: [["createdAt", "DESC"]],
 // });
+
+//DELETE TRANSACTIONS
+export const deleteTransaction = async (req, res) => {
+  const id = req.params.id;
+  const userId = req.user.id;
+
+  const count = await Transaction.destroy({
+    where: { id, user_id: userId },
+  });
+
+  if (count === 0) {
+    return res.status(404).json({ message: "Eintrag nicht gefunden" });
+  }
+
+  res.status(204).send();
+};
